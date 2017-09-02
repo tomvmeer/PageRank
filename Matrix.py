@@ -36,15 +36,14 @@ class NewMatrix:
 
 
 def addition(matrix1, matrix2):
-    if matrix1.w == matrix2.w:
-        if matrix1.h == matrix2.h:
-            result = NewMatrix(matrix1.h, matrix1.w)
-            for y in range(0, matrix1.h):
-                for x in range(0, matrix2.h):
-                    result.set((matrix1.empty[y][x]+matrix2.empty[y][x]), x, y)
-            return result
+    if matrix1.w == matrix2.w and matrix1.h == matrix2.h:
+        result = NewMatrix(matrix1.h, matrix1.w)
+        for y in range(0, matrix1.h):
+            for x in range(0, matrix2.h):
+                result.set((matrix1.empty[y][x]+matrix2.empty[y][x]), x, y)
+        return result
     else:
-        return 0
+        raise IndexError("Entered matrix with non-valid dimensions!")
 
 
 def multiplication(matrix1, matrix2):
@@ -73,7 +72,7 @@ def multiplication(matrix1, matrix2):
                     yresult = yresult + 1
         return result
     else:
-        return 0
+        raise IndexError("Entered matrix with non-valid dimensions!")
 
 
 def multiplication_number(matrix, number):
