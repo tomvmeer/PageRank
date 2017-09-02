@@ -25,3 +25,5 @@ print("")
 
 m5 = Matrix.multiplication_number(m4, 10)
 m5.print_out()
+
+print("test")
