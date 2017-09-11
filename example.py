@@ -6,7 +6,7 @@ m.adv_set_col([8, 6, 4, 2], 1)
 m.print_out()
 
 print("")
-m2 = Matrix.NewMatrix(3, 4)
+m2 = Matrix.NewMatrix(3,4)
 m2.adv_set_row([1, 2, 3, 4], 0)
 m2.adv_set_row([5, 6, 7, 8], 1)
 m2.adv_set_row([9, 0, -1, -2], 2)
