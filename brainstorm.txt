@@ -1,0 +1,24 @@
+get data:
+
+que: has all the websites that still need to be looked at
+database: has all the websites that have been looked at with their outgoing link count
+
+/startloop:
+workers run goto(url), with the url coming from the que, from the list it returns, check if those sites have been
+visited, first check LRU cache, if not in there, check the database. If the website has not been looked at, so there is
+no data on it in the database or in the cache, add it to the que. Then add the count of website 'url' to the database.
+/endloop
+
+database is slow, use LRU cache to store most looked up urls
+------------------------------------------------------------------------------------------------------------------------
+pagerank:
+
+determine weight of outgoing links by dividing 1 by the ammount of outgoing urls. (Do more of the same count??, so site
+A links 6 times to site B and once to side C, then it gives 6/7 to B and 1/7 to C?)
+
+how to go from: {"websitename",outgoing to: "google.nl" 12, "twitter.nl" 14...} to a matrix, to a calculation of rank??
+how to do this effectively, without using too much ram?
+
+return the resutling importance of websites in a list, where only x part of the total websites known in the database is
+shown. get x so if the page is on the ranklist, there was sufficient information to actually rank, make sure no small
+sites end at the top because of luck.
