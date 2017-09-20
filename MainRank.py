@@ -1,6 +1,6 @@
 import urllib.request
 import multiprocessing
-import time
+import Matrix
 
 
 def isolate(url):
@@ -17,6 +17,10 @@ def isolate(url):
 
 
 def count(urls):
+    if urls == []:
+        return False
+    if urls == None:
+        return False
     isolated = []
     for url in urls:
         try:
@@ -25,11 +29,17 @@ def count(urls):
             pass
     host_counter = {}
     for element in isolated:
-        try:
-            host_counter[element] = int(host_counter[element]) + 1
-        except:
-            host_counter[element] = 1
-    return host_counter
+        if element != None:
+            try:
+                host_counter[element] = int(host_counter[element]) + 1
+            except:
+                host_counter[element] = 1
+    if host_counter == {}:
+        return False
+    elif host_counter == "":
+        return False
+    else:
+        return host_counter
 
 
 def go_to(link):
@@ -37,7 +47,7 @@ def go_to(link):
     try:
         data = str(urllib.request.urlopen(link).read())
     except:
-        return ""
+        return False
     else:
         for i in range(1, len(data.split("href="))):
             if "http" in ((data.split("href="))[i]):
@@ -50,36 +60,66 @@ def go_to(link):
         return count(urls)
 
 
-website = "http://startpagina.nl"
-counted = go_to(str(website))
-data = []
-start = time.time()
-for url in counted:
-    data.append(go_to("http://www." + str(url)))
-print(data)
-print("")
-print(time.time() - start)
-
-
 def worker(d, url):
     counted = go_to("http://www."+str(url))
-    if counted:
-        counted["from"] = url
-        d.append(counted)
+    if counted != None or counted != False:
+        if counted:
+            counted["from"] = url
+            d.append(counted)
 
 
-if __name__ != '__main__':
-    start = time.time()
+if __name__ == '__main__':
+    # Starting point of crawler:
+    website = "http://www.startpagina.nl"
+    counted = go_to(str(website))
+    if counted == False:
+        print("No internet")
+    to_do = counted
+    # Pre loop variables:
+    data = Matrix.NewMatrix(1, 1)
+    froms = []
+    unique_urls = []
+    error = 0
+    done_total = 0
+    x = 0
+    y = 0
+    # Main loop:
     mgr = multiprocessing.Manager()
     d = mgr.list()
     jobs = []
-    for url in counted:
+    for url in to_do:
         jobs.append(multiprocessing.Process(target=worker, args=(d, url)))
+    print(len(to_do))
     for j in jobs:
         j.start()
     for j in jobs:
         j.join()
+    # Done multi threading
+    done = 0
+    to_do = []
     for item in d:
-        print(item)
-    print("")
-    print(time.time()-start)
+        if item["from"] not in froms:
+            if x == data.w:
+                data.new_column()
+            froms.append(item["from"])
+            for url in item:
+                if url not in unique_urls:
+                    if url != "from" and url != None:
+                        if y == data.h:
+                            data.new_row()
+                        unique_urls.append(url)
+                        to_do.append(url)
+                        data.set(item[url],x,y)
+                        y += 1
+                        done += 1
+                elif url != None:
+                    y1 = unique_urls.index(url)
+                    x1 = froms.index(item["from"])
+                    data.set(item[url] + data.matrix[y1][x1] , x1, y1)
+        else:
+            error += 1
+        x += 1
+    data.print_out()
+    print(len(unique_urls),data.h)
+    print(len(froms), data.w)
+

@@ -18,6 +18,20 @@ class NewMatrix:
             empty.append(empty_x)
         self.matrix = empty  # empty is the empty matrix
 
+    # Function for adding a new row of 0's to the matrix
+    def new_row(self):
+        new = []
+        for i in range(0, self.w):
+            new.append(0)
+        self.matrix.append(new)
+        self.h += 1
+
+    # Function for adding a new column of 0's to the matrix
+    def new_column(self):
+        for row in self.matrix:
+            row.append(0)
+        self.w += 1
+
     # Function for printing out the formatted matrix
     def print_out(self):
         length_list = []

@@ -1,2 +1,0 @@
-74.04731225967407 sec multi thread
-296.07362818717957 sec no thread
